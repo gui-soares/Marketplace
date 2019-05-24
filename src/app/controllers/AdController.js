@@ -2,7 +2,9 @@ const Ad = require('../models/Ad')
 
 class AdController {
   async index (req, res) {
-    const filters = {}
+    const filters = {
+      purchasedBy: null
+    }
 
     if (req.query.price_min || req.query.price_max) {
       filters.price = {}
@@ -39,7 +41,7 @@ class AdController {
   }
 
   async show (req, res) {
-    const ad = await Ad.findById(req.params.id)
+    const ad = await Ad.findById(req.params.id).populate({ path: 'author' })
 
     return res.json(ad)
   }
