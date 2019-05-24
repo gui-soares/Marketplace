@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express')
 const mongoose = require('mongoose')
 const validate = require('express-validation')
@@ -47,7 +49,9 @@ class App {
   }
 
   exception () {
-    this.express.use(Sentry.Handlers.errorHandler())
+    if (process.env.NODE_ENV === 'production') {
+      this.express.use(Sentry.Handlers.errorHandler())
+    }
 
     this.express.use(async (err, req, res, next) => {
       if (err instanceof validate.ValidationError) {
